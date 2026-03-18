@@ -264,7 +264,7 @@
       font-weight: 400;
     }
 
-    /* Ұйымдастырушылар блогы (жаңа) */
+    /* Ұйымдастырушылар блогы */
     .organizers-block {
       background: #fffbf3;
       padding: 1.8rem;
@@ -344,7 +344,7 @@
       letter-spacing: 0.1em;
     }
 
-    /* 5-бөлім — чат */
+    /* 5-бөлім — чат (ТЕК ЖАҢА ХАБАРЛАМАЛАР) */
     .chat-container {
       background: #fffef9;
       border-radius: 48px 24px 48px 24px;
@@ -427,7 +427,7 @@
       transform: scale(1.02) translateY(-3px);
     }
 
-    /* футер */
+    /* футер (Instagram сілтемесімен) */
     footer {
       text-align: center;
       padding: 2rem;
@@ -437,6 +437,23 @@
       font-weight: 500;
       border-top: 4px solid #c9a53b;
       letter-spacing: 2px;
+    }
+    
+    .instagram-link {
+      color: #8a6e3b;
+      text-decoration: none;
+      font-weight: 700;
+      background: linear-gradient(135deg, #b58d3b, #6b4f27);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: all 0.3s ease;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .instagram-link:hover {
+      border-bottom-color: #c9a53b;
+      transform: translateY(-2px);
     }
 
     /* responsive */
@@ -534,7 +551,7 @@
           </div>
         </div>
 
-        <!-- ҰЙЫМДАСТЫРУШЫЛАР БЛОГЫ (жаңа) -->
+        <!-- ҰЙЫМДАСТЫРУШЫЛАР БЛОГЫ -->
         <div class="organizers-block">
           <h3>Асты ұйымдастырушылар</h3>
           <p>
@@ -555,44 +572,52 @@
       </div>
     </section>
 
-    <!-- 5-БӨЛІМ: ҚОНАҚТАР ЧАТЫ (сақталатын хабарламалар) -->
+    <!-- 5-БӨЛІМ: ҚОНАҚТАР ЧАТЫ (ТЕК ЖАҢА ХАБАРЛАМАЛАР) -->
     <section id="chat">
       <div class="section-card">
         <h2>Қонақтар чаты</h2>
         <div class="chat-container">
           <div id="chatMessages" class="chat-messages">
-            <!-- хабарламалар осында динамикалық толады -->
+            <!-- Хабарламалар тек жіберілгеннен кейін пайда болады -->
           </div>
           <div class="chat-controls">
             <input type="text" id="chatName" placeholder="Атыңыз" value="Қонақ" maxlength="30">
             <input type="text" id="chatMessage" placeholder="Хабарламаңыз..." maxlength="200">
             <button id="sendChatBtn">Жіберу</button>
           </div>
-          <p style="margin-top: 1rem; font-size: 0.9rem; color:#b4a175;">Пікірлер сақталады (браузердің жергілікті жады)</p>
+          <p style="margin-top: 1rem; font-size: 0.9rem; color:#b4a175;">Тек жаңа хабарламалар сақталады</p>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- ФУТЕР (Instagram сілтемесімен) -->
   <footer>
-    Жасаған — Ayan KZ
+    Жасаған — <a href="https://instagram.com/aian_wtkkz" target="_blank" class="instagram-link">@aian_wtkkz</a>
   </footer>
 
   <script>
     (function() {
-      // === ЧАТ ЖҮЙЕСІ (LocalStorage) ===
+      // === ЧАТ ЖҮЙЕСІ (LocalStorage) - ТЕК ЖАҢА ХАБАРЛАМАЛАР ===
       const STORAGE_KEY = "asqaty_chat_messages";
 
-      // алғашқы mesajдар (ештеңе жоқ болса)
-      const defaultMessages = [
-        { name: "Қырғызалы", text: "Құтты болсын! Ас берейік.", time: Date.now() - 3600000 },
-        { name: "Ынтымақ", text: "Келеміз, жол болсын!", time: Date.now() - 1800000 }
-      ];
+      // Бос массив - ешқандай алдын ала жазылған хабар жоқ
+      let messages = [];
 
-      // load немесе init
-      let messages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultMessages;
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        // алғаш рет сақтау
+      // LocalStorage-дан хабарларды оқу (егер бар болса)
+      const storedMessages = localStorage.getItem(STORAGE_KEY);
+      if (storedMessages) {
+        try {
+          messages = JSON.parse(storedMessages);
+          // Тек массив екенін тексеру
+          if (!Array.isArray(messages)) {
+            messages = [];
+          }
+        } catch (e) {
+          messages = [];
+        }
+      } else {
+        // Алғаш рет кіргенде бос массив сақтау
         localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
       }
 
@@ -604,22 +629,37 @@
       function renderChat() {
         if (!chatBox) return;
         chatBox.innerHTML = '';
-        // Соңғы 40 хабарламаны көрсету
-        const recent = messages.slice(-40);
-        recent.forEach(msg => {
-          const bubble = document.createElement('div');
-          bubble.className = 'chat-bubble';
-          const timeStr = new Date(msg.time).toLocaleTimeString('kk-KZ', { hour: '2-digit', minute: '2-digit' });
-          bubble.innerHTML = `<strong>${escapeHtml(msg.name || 'Аноним')}:</strong> <span>${escapeHtml(msg.text)}</span> <small>${timeStr}</small>`;
-          chatBox.appendChild(bubble);
-        });
+        
+        // Ешқандай хабар жоқ болса, хабарландыру көрсету
+        if (messages.length === 0) {
+          const emptyBubble = document.createElement('div');
+          emptyBubble.className = 'chat-bubble';
+          emptyBubble.style.background = '#f5ede1';
+          emptyBubble.style.color = '#8b7a5a';
+          emptyBubble.innerHTML = '<span>Әзірге хабарлама жоқ. Бірінші болып жазыңыз!</span>';
+          chatBox.appendChild(emptyBubble);
+        } else {
+          // Соңғы 40 хабарламаны көрсету
+          const recent = messages.slice(-40);
+          recent.forEach(msg => {
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-bubble';
+            const timeStr = new Date(msg.time).toLocaleTimeString('kk-KZ', { hour: '2-digit', minute: '2-digit' });
+            bubble.innerHTML = `<strong>${escapeHtml(msg.name || 'Аноним')}:</strong> <span>${escapeHtml(msg.text)}</span> <small>${timeStr}</small>`;
+            chatBox.appendChild(bubble);
+          });
+        }
+        
         chatBox.scrollTop = chatBox.scrollHeight; // автомат төмен
       }
 
       // қарапайым escape XSS үшін
       function escapeHtml(unsafe) {
         return unsafe.replace(/[&<>"]/g, function(m) {
-          if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; if(m === '"') return '&quot;';
+          if(m === '&') return '&amp;'; 
+          if(m === '<') return '&lt;'; 
+          if(m === '>') return '&gt;'; 
+          if(m === '"') return '&quot;';
           return m;
         });
       }
@@ -627,8 +667,20 @@
       function addMessage(name, text) {
         if (!name.trim()) name = "Қонақ";
         if (!text.trim()) return false;
-        const newMsg = { name: name.slice(0,30), text: text.slice(0,200), time: Date.now() };
+        
+        const newMsg = { 
+          name: name.slice(0,30), 
+          text: text.slice(0,200), 
+          time: Date.now() 
+        };
+        
         messages.push(newMsg);
+        
+        // Тек соңғы 100 хабарды сақтау (қажет болмаса алып тастауға болады)
+        if (messages.length > 100) {
+          messages = messages.slice(-100);
+        }
+        
         localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
         renderChat();
         return true;

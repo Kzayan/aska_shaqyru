@@ -237,12 +237,12 @@
       margin-bottom: 0.8rem;
     }
 
-    /* 4-бөлім — таймер + орны */
+    /* 4-бөлім — таймер + орны + ұйымдастырушылар */
     .time-place-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 2.5rem;
-      margin-bottom: 3rem;
+      margin-bottom: 2rem;
     }
     .info-block {
       flex: 1 1 240px;
@@ -262,6 +262,41 @@
     .info-block p {
       font-size: 1.3rem;
       font-weight: 400;
+    }
+
+    /* Ұйымдастырушылар блогы (жаңа) */
+    .organizers-block {
+      background: #fffbf3;
+      padding: 1.8rem;
+      border-radius: 40px 16px 40px 16px;
+      border: 1px solid #e7cf9e;
+      box-shadow: 0 16px 28px -12px #d0b27b;
+      margin: 1.5rem 0 2rem 0;
+      text-align: center;
+    }
+    .organizers-block h3 {
+      font-size: 1.8rem;
+      color: #7a623b;
+      margin-bottom: 1rem;
+      border-bottom: 2px dotted #dac48b;
+      padding-bottom: 0.5rem;
+      display: inline-block;
+    }
+    .organizers-block p {
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: #5b4a30;
+      line-height: 1.7;
+    }
+    .organizers-block span.city-highlight {
+      background: linear-gradient(145deg, #c9a53b, #a4813b);
+      color: white;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      margin: 0 0.3rem;
+      display: inline-block;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
 
     .countdown-title {
@@ -410,6 +445,7 @@
       .navbar { padding: 0.6rem; }
       .nav-link { font-size: 1rem; }
       .timer-card { min-width: 70px; }
+      .organizers-block p { font-size: 1.2rem; }
     }
 
     /* қосымша сәндік */
@@ -479,7 +515,7 @@
       </div>
     </section>
 
-    <!-- 4-БӨЛІМ: ӨТЕТІН УАҚЫТЫ + COUNTDOWN ТАЙМЕР -->
+    <!-- 4-БӨЛІМ: ӨТЕТІН УАҚЫТЫ + ҰЙЫМДАСТЫРУШЫЛАР + COUNTDOWN -->
     <section id="waqyt">
       <div class="section-card">
         <h2>Өтетін уақыты</h2>
@@ -496,6 +532,16 @@
             <h3>Ас беру</h3>
             <p>30 маусым 2026 — 11:00</p>
           </div>
+        </div>
+
+        <!-- ҰЙЫМДАСТЫРУШЫЛАР БЛОГЫ (жаңа) -->
+        <div class="organizers-block">
+          <h3>Асты ұйымдастырушылар</h3>
+          <p>
+            <span class="city-highlight">Астана</span> және 
+            <span class="city-highlight">Алматы</span> қалаларында тұратын 
+            <strong>Қырғызалы Ата</strong> руының ұрпақтары.
+          </p>
         </div>
 
         <div class="countdown-title">Ас беруге дейін қалған уақыт</div>
@@ -662,4 +708,4 @@
     }
   </style>
 </body>
-  </html>
+</html>
